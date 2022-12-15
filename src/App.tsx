@@ -1,19 +1,17 @@
 import './styles.scss'
-import IMAGE from './react.png'
-import Logo from './logo.svg'
-import LogoLink from './logo.svg?inline'
-import ClickCounter from './ClickCounter'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import MainPage from './pages/MainPage/MainPage'
+import { Provider } from 'react-redux'
+import { store } from './store'
 export const App = () => {
   return (
-    <>
-      <h1>Hello :')</h1>
-      <h1>
-        {process.env.NODE_ENV} - {process.env.name}
-      </h1>
-      <img src={IMAGE} alt="React logo" width="200" />
-      <img src={LogoLink} alt="React logo" width="200" />
-      <Logo width={100} />
-      <ClickCounter />
-    </>
+    <Provider store={store}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<MainPage />} />
+          <Route path="*" element={<h1>404 Page!</h1>} />
+        </Routes>
+      </BrowserRouter>
+    </Provider>
   )
 }
