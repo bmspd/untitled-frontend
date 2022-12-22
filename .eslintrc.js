@@ -29,6 +29,7 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     'react/display-name': 'off',
     'react/no-unescaped-entities': 'off',
+    'react-hooks/exhaustive-deps': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     'import/no-unresolved': [
       'warn',

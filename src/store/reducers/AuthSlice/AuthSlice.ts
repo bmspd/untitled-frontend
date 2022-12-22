@@ -1,8 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { login } from './asyncThunks'
+import { getInfo, login } from './asyncThunks'
 
 const initialState = {
   isAuth: false,
+  isCheckedGetInfo: false,
 }
 
 const AuthSlice = createSlice({
@@ -14,10 +15,19 @@ const AuthSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         localStorage.setItem('accessToken', action.payload.accessToken)
         localStorage.setItem('refreshToken', action.payload.refreshToken)
+        localStorage.setItem('userId', action.payload.user_id)
         state.isAuth = true
       })
       .addCase(login.rejected, () => {
         console.log('REJECTED!')
+      })
+      .addCase(getInfo.fulfilled, (state) => {
+        state.isAuth = true
+        state.isCheckedGetInfo = true
+      })
+      .addCase(getInfo.rejected, (state) => {
+        state.isCheckedGetInfo = true
+        localStorage.removeItem('userId')
       })
   },
 })

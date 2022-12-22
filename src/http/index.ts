@@ -17,16 +17,20 @@ $api.interceptors.response.use(
     return response
   },
   async (error) => {
-    if (error.response.status === 401) {
-      const apiResponse = await axios.get(
-        'http://localhost:3000/auth/refresh',
-        {
+    if (error.response.status === 401 && localStorage.getItem('refreshToken')) {
+      let apiResponse
+      try {
+        apiResponse = await axios.get('http://localhost:3000/auth/refresh', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('refreshToken')}`,
           },
-        }
-      )
-
+        })
+      } catch (e) {
+        /*avoid multiply refresh-token requests*/
+        localStorage.removeItem('refreshToken')
+        localStorage.removeItem('accessToken')
+        throw e
+      }
       localStorage.setItem('accessToken', apiResponse.data.accessToken)
       localStorage.setItem('refreshToken', apiResponse.data.refreshToken)
       error.config.headers[
